@@ -58,9 +58,12 @@ class App extends React.Component {
     const Box = ({type, id, dropHandler}) => {
       const [, drag] = useDrag({
           item: { type, id },
+          collect: monitor => {
+            console.log(monitor.getItem(), monitor.getItemType())
+          },
           end: (item, monitor) => {
               const dropResult = monitor.getDropResult();
-              console.log(item)
+              console.log(monitor.getItem(), monitor.getItemType())
               if (item && dropResult) {
                   switch(dropResult.type) {
                       case "one":
@@ -86,8 +89,7 @@ class App extends React.Component {
           { this.state.boxes.map((box, i) => (
             <Box {...box} key={i} dropHandler={ item => {
               const without = this.state.boxes.filter(box => JSON.stringify(box) !== JSON.stringify(item));
-              const boxes = [...without, item];
-              this.setState({boxes: boxes});
+              this.setState({boxes: without});
             }}/>)
           )}
           <div>
